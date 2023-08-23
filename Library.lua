@@ -1280,9 +1280,9 @@ do
                 ModeSelectOuter.Visible = true;
             end;
         end);
-
-        Library:GiveSignal(InputService.InputBegan:Connect(function(Input)
-            if (not Picking) then
+        
+        Library:GiveSignal(InputService.InputBegan:Connect(function(Input, Processed)
+            if (not Picking) and not Processed then
                 if KeyPicker.Mode == 'Toggle' then
                     local Key = KeyPicker.Value;
 
@@ -3625,6 +3625,7 @@ function Library:CreateWindow(...)
     end
 
     Library:GiveSignal(InputService.InputBegan:Connect(function(Input, Processed)
+        if Processed then return end
         if type(Library.ToggleKeybind) == 'table' and Library.ToggleKeybind.Type == 'KeyPicker' then
             if Input.UserInputType == Enum.UserInputType.Keyboard and Input.KeyCode.Name == Library.ToggleKeybind.Value then
                 task.spawn(Library.Toggle)
